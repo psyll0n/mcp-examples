@@ -1,14 +1,18 @@
-# imports
+"""FastMCP calculator example using STDIO transport.
+
+This version is intended for local MCP clients that launch the server
+as a subprocess and communicate over standard input/output.
+"""
+
 from fastmcp import FastMCP
 
 
-mcp = FastMCP(name = "Calculator")
+mcp = FastMCP(name="Calculator")
 
-# Define tools for basic arithmetic operations
-# The @mcp.tool() decorator registers the function as a tool that can be called by the MCP agent.
+
 @mcp.tool()
 def multiply(a: float, b: float) -> float:
-    """Multiplies two numbers.
+    """Multiply two numbers.
     
     Args:
         a (float): The first number.
@@ -20,11 +24,9 @@ def multiply(a: float, b: float) -> float:
     return a * b
 
 
-@mcp.tool(name = "Addition", 
-          description = "Adds two numbers together.", 
-          tags={"math", "arithmetic"})
+@mcp.tool(name="Addition", description="Adds two numbers together.", tags={"math", "arithmetic"})
 def add(a: float, b: float) -> float:
-    """Adds two numbers together.
+    """Add two numbers.
     
     Args:
         a (float): The first number.
@@ -36,11 +38,13 @@ def add(a: float, b: float) -> float:
     return a + b
 
 
-@mcp.tool(name = "Subtraction", 
-          description = "Subtracts the second number from the first number.", 
-          tags={"math", "arithmetic"})
+@mcp.tool(
+    name="Subtraction",
+    description="Subtracts the second number from the first number.",
+    tags={"math", "arithmetic"},
+)
 def subtract(a: float, b: float) -> float:
-    """Subtracts the second number from the first number.
+    """Subtract the second number from the first number.
     
     Args:
         a (float): The first number.
@@ -52,11 +56,9 @@ def subtract(a: float, b: float) -> float:
     return a - b
 
 
-@mcp.tool(name = "Division", 
-          description = "Divides the first number by the second number.", 
-          tags={"math", "arithmetic"})
+@mcp.tool(name="Division", description="Divides the first number by the second number.", tags={"math", "arithmetic"})
 def divide(a: float, b: float) -> float:
-    """Divides the first number by the second number.
+    """Divide the first number by the second number.
     
     Args:
         a (float): The first number.
@@ -70,10 +72,9 @@ def divide(a: float, b: float) -> float:
     """
     if b == 0:
         raise ValueError("Cannot divide by zero.")
-    return a / b    
+    return a / b
 
 
 
 if __name__ == "__main__":
-    # STDIO is used for input and output, allowing the server to interact with the user through the command line.
-    mcp.run() # Start the MCP server and allow it to process user queries and call the registered tools as needed.
+    mcp.run()

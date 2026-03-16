@@ -1,4 +1,9 @@
-# imports
+"""FastMCP calculator example using HTTP transport.
+
+This version exposes the same calculator tools but runs as a networked
+HTTP server for remote MCP clients.
+"""
+
 from fastmcp import FastMCP
 
 
@@ -9,7 +14,7 @@ mcp = FastMCP(name="Calculator")
 # The @mcp.tool() decorator registers the function as a tool that can be called by the MCP agent.
 @mcp.tool()
 def multiply(a: float, b: float) -> float:
-    """Multiplies two numbers.
+    """Multiply two numbers.
 
     Args:
         a (float): The first number.
@@ -27,7 +32,7 @@ def multiply(a: float, b: float) -> float:
     tags={"math", "arithmetic"},
 )
 def add(a: float, b: float) -> float:
-    """Adds two numbers together.
+    """Add two numbers.
 
     Args:
         a (float): The first number.
@@ -45,7 +50,7 @@ def add(a: float, b: float) -> float:
     tags={"math", "arithmetic"},
 )
 def subtract(a: float, b: float) -> float:
-    """Subtracts the second number from the first number.
+    """Subtract the second number from the first number.
 
     Args:
         a (float): The first number.
@@ -63,7 +68,7 @@ def subtract(a: float, b: float) -> float:
     tags={"math", "arithmetic"},
 )
 def divide(a: float, b: float) -> float:
-    """Divides the first number by the second number.
+    """Divide the first number by the second number.
 
     Args:
         a (float): The first number.
@@ -81,5 +86,4 @@ def divide(a: float, b: float) -> float:
 
 
 if __name__ == "__main__":
-    # Start the MCP server using HTTP transport. You can also use "websocket" or "grpc" as needed.
     mcp.run(transport="http", host="localhost", port=8080)

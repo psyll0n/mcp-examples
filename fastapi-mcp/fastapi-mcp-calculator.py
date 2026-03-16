@@ -1,15 +1,19 @@
-# imports
-from fastapi import FastAPI
-# In order to convert a FastAPI app to an MCP server, we need the fastapi_mcp package.
-from fastapi_mcp import FastApiMCP 
+"""FastAPI calculator example exposed as an MCP server.
 
-# Let's make a FastAPI app to serve our calculator tools
+This module defines a minimal calculator API and mounts it through
+`fastapi-mcp` so MCP clients can discover and call the operations.
+"""
+
+from fastapi import FastAPI, HTTPException
+from fastapi_mcp import FastApiMCP
+
+
 app = FastAPI(title="Calculator API")
 
 
 @app.post("/multiply/")
 def multiply(a: float, b: float) -> float:
-    """Multiplies two numbers.
+    """Multiply two numbers.
 
     Args:
         a (float): The first number.
@@ -18,14 +22,12 @@ def multiply(a: float, b: float) -> float:
     Returns:
         float: The product of the two numbers.
     """
-    result = a * b
-    return result
-
+    return a * b
 
 
 @app.post("/divide/")
-def divide(a: float, b: float) -> float:    
-    """Divides the first number by the second number.
+def divide(a: float, b: float) -> float:
+    """Divide the first number by the second number.
 
     Args:
         a (float): The first number.
@@ -33,16 +35,18 @@ def divide(a: float, b: float) -> float:
 
     Returns:
         float: The quotient of the two numbers.
+
+    Raises:
+        HTTPException: If the second number is zero.
     """
     if b == 0:
-        raise ValueError("Cannot divide by zero.")
-    result = a / b
-    return result
+        raise HTTPException(status_code=400, detail="Cannot divide by zero.")
+    return a / b
 
 
 @app.post("/add/")
 def add(a: float, b: float) -> float:
-    """Adds two numbers together.
+    """Add two numbers.
 
     Args:
         a (float): The first number.
@@ -51,14 +55,12 @@ def add(a: float, b: float) -> float:
     Returns:
         float: The sum of the two numbers.
     """
-    result = a + b
-    return result   
-
+    return a + b
 
 
 @app.post("/subtract/")
 def subtract(a: float, b: float) -> float:
-    """Subtracts the second number from the first number.
+    """Subtract the second number from the first number.
 
     Args:
         a (float): The first number.
@@ -67,17 +69,14 @@ def subtract(a: float, b: float) -> float:
     Returns:
         float: The difference of the two numbers.
     """
-    result = a - b
-    return result
+    return a - b
 
-# Now we can convert our FastAPI app to an MCP server using the FastApiMCP class.
+
 mcp = FastApiMCP(app, name="Calculator")
-# mcp.mount_http() will mount the MCP server on the FastAPI app, allowing it to handle MCP requests.
-# In order to inspect the MCP server, the command `npx @modelcontextprotocol/inspector http://localhost:8000` can be used.
 mcp.mount_http()
+
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
